@@ -1,6 +1,10 @@
 FROM ubuntu:jammy
 
-ENV PYTHON_VERSION=3.11.6
+ARG PYTHON_VERSION=3.11.6
+ENV PYTHON_VERSION=${PYTHON_VERSION}
+
+ARG BUILD_THREADS=4
+ENV BUILD_THREADS=${BUILD_THREADS}
 
 RUN apt update && apt install -y build-essential tar gdb lcov pkg-config \
       libbz2-dev libffi-dev libgdbm-dev libgdbm-compat-dev liblzma-dev \
@@ -13,6 +17,6 @@ COPY Setup.local /src/Python-${PYTHON_VERSION}/Modules/Setup.local
 
 RUN cd /src/Python-${PYTHON_VERSION} && ./configure LDFLAGS="-static" --disable-shared --prefix=/opt/python --enable-optimizations
 
-RUN cd /src/Python-${PYTHON_VERSION} && make LDFLAGS="-static" LINKFORSHARED=" " -j 4
+RUN cd /src/Python-${PYTHON_VERSION} && make LDFLAGS="-static" LINKFORSHARED=" " -j ${BUILD_THREADS}
 
-RUN cd /src/Python-${PYTHON_VERSION} && make install -j 4
+RUN cd /src/Python-${PYTHON_VERSION} && make install -j ${BUILD_THREADS}
