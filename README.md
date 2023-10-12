@@ -1,5 +1,5 @@
-# pytjhon-static-builder
-Example for build python staticlly
+# python-static-builder
+Example for build python as static binary
 
 For build use
 `docker build --progress=plain . -t python-static --build-arg BUILD_THREADS=10`
